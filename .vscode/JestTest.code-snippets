@@ -1,0 +1,14 @@
+{
+  "Jest Test": {
+    "prefix": ["jestTest"],
+    "body": [
+      "describe('', () => {",
+      "  it('', () => {",
+      "",
+      "  })",
+      "})",
+      ""
+    ],
+    "description": "A describe block for Jest"
+  }
+}
