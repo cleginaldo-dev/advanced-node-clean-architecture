@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prepare": "husky install",
     "start": "node dist/main/api",
     "build": "rimraf dist && tsc -p tsconfig-build.json",
     "test": "jest --passWithNoTests --no-cache --runInBand",
     "test:unit": "npm test -- --watch",
     "test:staged": "npm test -- --findRelatedTests",
-    "test:coverage": "npm test -- --coverage",
-    "prepare": "husky install"
+    "test:coverage": "npm test -- --coverage"
   },
   "keywords": [],
   "author": "",
