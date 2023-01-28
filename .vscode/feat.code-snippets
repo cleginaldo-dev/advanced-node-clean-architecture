@@ -1,0 +1,18 @@
+{
+  "Jest Test": {
+    "prefix": [
+      "feat"
+    ],
+    "body": [
+      "export interface I${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} {",
+      "  perform: (params: I${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}.Params) => Promise<I${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}.Result>;",
+      "}",
+      "",
+      "export namespace I${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} {",
+      "  export type Params = {};",
+      "  export type Result = {};",
+      "}",
+    ],
+    "description": "A describe block for Jest"
+  }
+}
