@@ -3,7 +3,7 @@
     "prefix": ["jestTest"],
     "body": [
       "describe('${TM_FILENAME_BASE/(.*)[.](.*)/${1:/pascalcase}/}', () => {",
-      "  it('Should be able call ${TM_DIRECTORY/(.*)[-](.*)/${2:/pascalcase}/}Repository with correct values', async () => {",
+      "  it('Should be able call Repository with correct values', async () => {",
       "",
       "  })",
       "})",

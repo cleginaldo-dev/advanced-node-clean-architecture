@@ -23,6 +23,7 @@
   ],
   "rules": {
     "max-classes-per-file": "off",
+    "@typescript-eslint/no-empty-function": "off",
     "no-restricted-syntax": "off",
     "no-promise-executor-return": "off",
     "@typescript-eslint/no-namespace": "off",
