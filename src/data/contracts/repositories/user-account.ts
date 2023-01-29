@@ -12,7 +12,7 @@ export namespace ILoadUserAccountRepository {
     | undefined
     | {
         id: string;
-        name: string;
+        name?: string;
       };
 }
 
