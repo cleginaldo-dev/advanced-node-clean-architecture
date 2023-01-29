@@ -7,3 +7,17 @@ export namespace ILoadUserAccountRepository {
     email: string;
   };
 }
+
+export interface ICreateFacebookAccountRepository {
+  createFromFacebook(
+    params: ICreateFacebookAccountRepository.Params,
+  ): Promise<void>;
+}
+
+export namespace ICreateFacebookAccountRepository {
+  export type Params = {
+    name: string;
+    email: string;
+    facebook_id: string;
+  };
+}
