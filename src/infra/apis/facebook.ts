@@ -8,7 +8,9 @@ export class FacebookApi {
     private readonly clientId: string,
     private readonly clientSecret: string,
   ) {}
-  async loadUser(params: ILoadFacebookUserApi.Params): Promise<void> {
+  async loadUser(
+    params: ILoadFacebookUserApi.Params,
+  ): Promise<ILoadFacebookUserApi.Result> {
     const appToken = await this.httpClient.get({
       url: `${this.baseUrl}/oauth/access_token`,
       params: {
@@ -24,12 +26,17 @@ export class FacebookApi {
         input_token: params.token,
       },
     });
-    await this.httpClient.get({
+    const userInfo = await this.httpClient.get({
       url: `${this.baseUrl}/${debugToken.data.user_id}`,
       params: {
         fields: ['id', 'name', 'email'].join(','),
         input_token: params.token,
       },
     });
+    return {
+      facebook_id: userInfo.id,
+      email: userInfo.email,
+      name: userInfo.name,
+    };
   }
 }
