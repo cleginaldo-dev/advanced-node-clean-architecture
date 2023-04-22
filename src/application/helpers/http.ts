@@ -5,6 +5,11 @@ export type HttpResponse = {
   data: any;
 };
 
+export const success = (data: any): HttpResponse => ({
+  statusCode: 200,
+  data,
+});
+
 export const badResquest = (error: Error): HttpResponse => ({
   statusCode: 400,
   data: error,
