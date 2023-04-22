@@ -18,11 +18,13 @@ type UserInfo = {
 };
 export class FacebookApi {
   private readonly baseUrl = 'https://graph.facebook.com';
+
   constructor(
     private readonly httpClient: IHttpGetClient,
     private readonly clientId: string,
     private readonly clientSecret: string,
   ) {}
+
   async loadUser(
     params: ILoadFacebookUserApi.Params,
   ): Promise<ILoadFacebookUserApi.Result> {
@@ -33,6 +35,7 @@ export class FacebookApi {
       name: userInfo.name,
     };
   }
+
   private async getAppToken(): Promise<AppToken> {
     return this.httpClient.get({
       url: `${this.baseUrl}/oauth/access_token`,

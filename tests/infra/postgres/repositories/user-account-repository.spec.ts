@@ -1,6 +1,13 @@
 import { ILoadUserAccountRepository } from '@/data/contracts/repositories';
-import { newDb } from 'pg-mem';
-import { Entity, PrimaryGeneratedColumn, Column, getRepository } from 'typeorm';
+import { IBackup, newDb } from 'pg-mem';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  getRepository,
+  Repository,
+  getConnection,
+} from 'typeorm';
 
 @Entity({ name: 'usuarios' })
 export class PgUser {
@@ -32,38 +39,41 @@ class PgUserAccountRepository implements ILoadUserAccountRepository {
   }
 }
 describe('PgUserAccountRepository', () => {
-  beforeAll(() => {});
-
-  beforeEach(() => {});
-
-  it('Should be able call PgUserAccountRepository with correct values', async () => {
+  let sut: PgUserAccountRepository;
+  let pgUserRepo: Repository<PgUser>;
+  let backup: IBackup;
+  beforeAll(async () => {
     const db = newDb();
     const connection = await db.adapters.createTypeormConnection({
       type: 'postgres',
       entities: [PgUser],
     });
     await connection.synchronize();
-    const pgUserRepo = getRepository(PgUser);
+    backup = db.backup();
+    pgUserRepo = getRepository(PgUser);
+  });
+
+  beforeEach(() => {
+    backup.restore();
+    sut = new PgUserAccountRepository();
+  });
+
+  afterAll(async () => {
+    await getConnection().close();
+  });
+
+  it('Should be able call PgUserAccountRepository with correct values', async () => {
     await pgUserRepo.save({ email: 'existing_email' });
-    const sut = new PgUserAccountRepository();
 
     const account = await sut.load({ email: 'existing_email' });
 
     expect(account).toEqual({ id: '1' });
-    await connection.close();
   });
   it('Should return undefined if email does not exists', async () => {
-    const db = newDb();
-    const connection = await db.adapters.createTypeormConnection({
-      type: 'postgres',
-      entities: [PgUser],
-    });
-    await connection.synchronize();
     const sut = new PgUserAccountRepository();
 
     const account = await sut.load({ email: 'new_email' });
 
     expect(account).toBeUndefined();
-    await connection.close();
   });
 });

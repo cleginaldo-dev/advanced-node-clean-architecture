@@ -11,8 +11,11 @@ type AccountData = {
 
 export class FacebookAccount {
   id?: string;
+
   name: string;
+
   email: string;
+
   facebook_id: string;
 
   constructor(fbData: FacebookData, accountData?: AccountData) {
