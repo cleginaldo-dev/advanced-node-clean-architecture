@@ -22,8 +22,13 @@
     "prettier"
   ],
   "rules": {
-    "max-classes-per-file": "off",
+    "consistent-return": "off",
+    "camelcase": "off",
     "@typescript-eslint/no-empty-function": "off",
+    "class-methods-use-this": "off",
+    "import/no-unresolved": "off",
+    "no-useless-constructor": "off",
+    "max-classes-per-file": "off",
     "no-restricted-syntax": "off",
     "no-promise-executor-return": "off",
     "@typescript-eslint/no-namespace": "off",
@@ -33,7 +38,6 @@
         "argsIgnorePattern": "_"
       }
     ],
-    "import/no-unresolved": "off",
     "@typescript-eslint/naming-convention": [
       "error",
       {
@@ -47,11 +51,9 @@
         }
       }
     ],
-    "class-methods-use-this": "off",
     "no-shadow": "off",
-    "no-useless-constructor": "off",
     "no-empty-function": "off",
-    "lines-between-class-members": "off",
+    "lines-between-class-members": "error",
     "import-helpers/order-imports": [
       "warn",
       {
@@ -79,7 +81,6 @@
         ]
       }
     ],
-    "camelcase": "off",
     "no-nested-ternary": "off",
     "import/no-duplicates": "off",
     "import/prefer-default-export": "off",

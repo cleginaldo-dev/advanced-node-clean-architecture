@@ -12,6 +12,7 @@ export class PgUser {
 
   @Column()
   email!: string;
+
   @Column({ name: 'id_facebook', nullable: true })
   facebookId?: string;
 }
@@ -28,7 +29,6 @@ class PgUserAccountRepository implements ILoadUserAccountRepository {
         name: pgUser.name ?? undefined,
       };
     }
-    return undefined;
   }
 }
 describe('PgUserAccountRepository', () => {
@@ -43,12 +43,27 @@ describe('PgUserAccountRepository', () => {
       entities: [PgUser],
     });
     await connection.synchronize();
-    const PgUserRepo = getRepository(PgUser);
-    await PgUserRepo.save({ email: 'existing_email' });
+    const pgUserRepo = getRepository(PgUser);
+    await pgUserRepo.save({ email: 'existing_email' });
     const sut = new PgUserAccountRepository();
 
     const account = await sut.load({ email: 'existing_email' });
 
     expect(account).toEqual({ id: '1' });
+    await connection.close();
+  });
+  it('Should return undefined if email does not exists', async () => {
+    const db = newDb();
+    const connection = await db.adapters.createTypeormConnection({
+      type: 'postgres',
+      entities: [PgUser],
+    });
+    await connection.synchronize();
+    const sut = new PgUserAccountRepository();
+
+    const account = await sut.load({ email: 'new_email' });
+
+    expect(account).toBeUndefined();
+    await connection.close();
   });
 });
