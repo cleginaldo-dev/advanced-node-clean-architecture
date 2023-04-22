@@ -24,6 +24,7 @@
   "rules": {
     "consistent-return": "off",
     "camelcase": "off",
+    "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-empty-function": "off",
     "class-methods-use-this": "off",
     "import/no-unresolved": "off",
