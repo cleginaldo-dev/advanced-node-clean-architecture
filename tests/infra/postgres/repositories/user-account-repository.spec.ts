@@ -23,16 +23,31 @@ describe('PgUserAccountRepository', () => {
     await getConnection().close();
   });
 
-  it('Should be able call PgUserAccountRepository with correct values', async () => {
-    await pgUserRepo.save({ email: 'existing_email' });
+  describe('load', () => {
+    it('Should be able call PgUserAccountRepository with correct values', async () => {
+      await pgUserRepo.save({ email: 'existing_email' });
 
-    const account = await sut.load({ email: 'existing_email' });
+      const account = await sut.load({ email: 'existing_email' });
 
-    expect(account).toEqual({ id: '1' });
+      expect(account).toEqual({ id: '1' });
+    });
+    it('Should return undefined if email does not exists', async () => {
+      const account = await sut.load({ email: 'new_email' });
+
+      expect(account).toBeUndefined();
+    });
   });
-  it('Should return undefined if email does not exists', async () => {
-    const account = await sut.load({ email: 'new_email' });
 
-    expect(account).toBeUndefined();
+  describe('saveWithFacebook', () => {
+    it('Should create an account if id is undefined', async () => {
+      await sut.saveWithFacebook({
+        email: 'any_email',
+        name: 'any_name',
+        facebook_id: 'any_facebook_id',
+      });
+      const pgUser = await sut.load({ email: 'any_email' });
+
+      expect(pgUser?.id).toBe('1');
+    });
   });
 });
