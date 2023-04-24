@@ -7,7 +7,9 @@ class RequiredStringValidator {
   ) {}
 
   validate(): Error | undefined {
-    return new RequiredFieldError(this.fieldName);
+    if (this.value === '' || this.value === null || this.value === undefined) {
+      return new RequiredFieldError(this.fieldName);
+    }
   }
 }
 describe('RequiredStringValidator', () => {
@@ -35,5 +37,12 @@ describe('RequiredStringValidator', () => {
     const error = sut.validate();
 
     expect(error).toEqual(new RequiredFieldError('any_field'));
+  });
+  it('Should return undefined on success', async () => {
+    const sut = new RequiredStringValidator('any_value', 'any_field');
+
+    const error = sut.validate();
+
+    expect(error).toBeUndefined();
   });
 });
