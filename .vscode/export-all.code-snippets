@@ -1,0 +1,11 @@
+{
+  "Export All": {
+    "prefix": [
+      "ex"
+    ],
+    "body": [
+      "export * from './$1';",
+    ],
+    "description": "A describe block for Export All"
+  }
+}
