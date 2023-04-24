@@ -1,3 +1,3 @@
 export * from './required-string-validator';
-export * from './validation-composite';
+export * from './composite';
 export * from './contracts/i-validator';

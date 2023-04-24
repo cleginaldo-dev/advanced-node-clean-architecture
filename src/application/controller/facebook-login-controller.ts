@@ -5,7 +5,10 @@ import {
   success,
   unauthorized,
 } from '@/application/helpers';
-import { RequiredStringValidator } from '@/application/validation';
+import {
+  RequiredStringValidator,
+  ValidationComposite,
+} from '@/application/validation';
 import { IFacebookAuthentication } from '@/domain/features';
 import { AccessToken } from '@/domain/models';
 
@@ -43,7 +46,8 @@ export class FacebookLoginController {
   }
 
   private validate(httpRequest: httpRequest): Error | undefined {
-    const validator = new RequiredStringValidator(httpRequest.token, 'token');
-    return validator.validate();
+    return new ValidationComposite([
+      new RequiredStringValidator(httpRequest.token, 'token'),
+    ]).validate();
   }
 }
