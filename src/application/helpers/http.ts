@@ -10,7 +10,7 @@ export const success = <T = any>(data: T): HttpResponse<T> => ({
   data,
 });
 
-export const badResquest = (error: Error): HttpResponse<Error> => ({
+export const badRequest = (error: Error): HttpResponse<Error> => ({
   statusCode: 400,
   data: error,
 });

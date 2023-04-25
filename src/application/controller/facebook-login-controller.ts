@@ -1,12 +1,12 @@
 import {
-  badResquest,
+  badRequest,
   HttpResponse,
   serverError,
   success,
   unauthorized,
 } from '@/application/helpers';
 import {
-  RequiredStringValidator,
+  ValidationBuilder as B,
   ValidationComposite,
 } from '@/application/validation';
 import { IFacebookAuthentication } from '@/domain/features';
@@ -31,7 +31,7 @@ export class FacebookLoginController {
     try {
       const error = this.validate(httpRequest);
       if (error) {
-        return badResquest(error);
+        return badRequest(error);
       }
       const accessToken = await this.facebookAuthentication.perform({
         token: httpRequest.token,
@@ -46,8 +46,9 @@ export class FacebookLoginController {
   }
 
   private validate(httpRequest: httpRequest): Error | undefined {
+    const { token } = httpRequest;
     return new ValidationComposite([
-      new RequiredStringValidator(httpRequest.token, 'token'),
+      ...B.of({ value: token, fieldName: 'token' }).required().build(),
     ]).validate();
   }
 }
