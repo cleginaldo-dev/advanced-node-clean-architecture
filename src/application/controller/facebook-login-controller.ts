@@ -1,14 +1,6 @@
-import {
-  badRequest,
-  HttpResponse,
-  serverError,
-  success,
-  unauthorized,
-} from '@/application/helpers';
-import {
-  ValidationBuilder as B,
-  ValidationComposite,
-} from '@/application/validation';
+import { Controller } from '@/application/controller';
+import { HttpResponse, success, unauthorized } from '@/application/helpers';
+import { ValidationBuilder as B, IValidator } from '@/application/validation';
 import { IFacebookAuthentication } from '@/domain/features';
 import { AccessToken } from '@/domain/models';
 
@@ -22,33 +14,25 @@ type Model =
       accessToken: string;
     };
 
-export class FacebookLoginController {
+export class FacebookLoginController extends Controller {
   constructor(
     private readonly facebookAuthentication: IFacebookAuthentication,
-  ) {}
-
-  async handle(httpRequest: httpRequest): Promise<HttpResponse<Model>> {
-    try {
-      const error = this.validate(httpRequest);
-      if (error) {
-        return badRequest(error);
-      }
-      const accessToken = await this.facebookAuthentication.perform({
-        token: httpRequest.token,
-      });
-      if (accessToken instanceof AccessToken) {
-        return success({ accessToken: accessToken.value });
-      }
-      return unauthorized();
-    } catch (error) {
-      return serverError(error);
-    }
+  ) {
+    super();
   }
 
-  private validate(httpRequest: httpRequest): Error | undefined {
+  async perform(httpRequest: httpRequest): Promise<HttpResponse<Model>> {
+    const accessToken = await this.facebookAuthentication.perform({
+      token: httpRequest.token,
+    });
+    if (accessToken instanceof AccessToken) {
+      return success({ accessToken: accessToken.value });
+    }
+    return unauthorized();
+  }
+
+  override buildValidators(httpRequest: httpRequest): IValidator[] {
     const { token } = httpRequest;
-    return new ValidationComposite([
-      ...B.of({ value: token, fieldName: 'token' }).required().build(),
-    ]).validate();
+    return [...B.of({ value: token, fieldName: 'token' }).required().build()];
   }
 }
