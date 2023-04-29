@@ -3,18 +3,19 @@ import { AxiosHttpClient } from '@/infra/http';
 import { env } from '@/main/config/env';
 
 describe('FacebookApi', () => {
-  beforeAll(() => {});
+  let axiosClient: AxiosHttpClient;
+  let sut: FacebookApi;
 
-  beforeEach(() => {});
-
-  it('Should return a Facebook User if token is valid', async () => {
-    const axiosClient = new AxiosHttpClient();
-    const sut = new FacebookApi(
+  beforeEach(() => {
+    axiosClient = new AxiosHttpClient();
+    sut = new FacebookApi(
       axiosClient,
       env.facebookApi.clientId,
       env.facebookApi.clientSecret,
     );
+  });
 
+  it('Should return a Facebook User if token is valid', async () => {
     const fbUser = await sut.loadUser({
       token:
         'JHNGDFGMHÇDThbsdfjsj785498-90854830485098458-039480-8349845sfaQEWW',
@@ -28,13 +29,6 @@ describe('FacebookApi', () => {
   });
 
   it('Should return undefined if token is invalid', async () => {
-    const axiosClient = new AxiosHttpClient();
-    const sut = new FacebookApi(
-      axiosClient,
-      env.facebookApi.clientId,
-      env.facebookApi.clientSecret,
-    );
-
     const fbUser = await sut.loadUser({
       token: 'invalid',
     });
