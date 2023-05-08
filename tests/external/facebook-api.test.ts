@@ -18,13 +18,13 @@ describe('FacebookApi', () => {
   it('Should return a Facebook User if token is valid', async () => {
     const fbUser = await sut.loadUser({
       token:
-        'JHNGDFGMHÇDThbsdfjsj785498-90854830485098458-039480-8349845sfaQEWW',
+        'EAADX1utklSkBAKh254JyTuZChInWXaxsSC3UvWUjzzQoCmEev4rheEZB7LP7ZB1ZApXm8lwt9MTrifubesiOZCPIyCP3zB3tiriRjIkZBnFh84VmJXgl3BzaCJvZBS4hubZCWAa2SJX41BhUtqEPP36qHqRdZCpQce7XBNtxZBFhOlo3wT2li4G1HSYTcUCIyIothsTiaGk4ZAIQzSQ7XKlZBQy8B6wIPK36yCnqZAdkdRXfiwZCZCdZBvjNGDZAs',
     });
 
     expect(fbUser).toEqual({
       facebook_id: '728079287908964',
-      email: 'mang_saczvlo_teste@tfbnw.net',
-      name: 'Mango Teste',
+      email: 'cleginaldo3000@gmail.com',
+      name: 'Cleginaldo Bandeiras',
     });
   });
 
