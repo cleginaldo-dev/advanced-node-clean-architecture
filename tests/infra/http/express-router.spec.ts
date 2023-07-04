@@ -1,17 +1,19 @@
 import { Controller } from '@/application/controller';
-import { ExpressRouter } from '@/infra/http';
+import { adapt } from '@/infra/http';
 import { getMockReq, getMockRes } from '@jest-mock/express';
-import { Request, Response } from 'express';
+import { Request, RequestHandler, Response, NextFunction } from 'express';
 import { mock, MockProxy } from 'jest-mock-extended';
 
 describe('ExpressRouter', () => {
   let req: Request;
   let res: Response;
   let controller: MockProxy<Controller>;
-  let sut: ExpressRouter;
+  let sut: RequestHandler;
+  let next: NextFunction;
   beforeAll(() => {
     req = getMockReq({ body: { any: 'any' } });
     res = getMockRes().res;
+    next = getMockRes().next;
     controller = mock();
     controller.handle.mockResolvedValue({
       statusCode: 200,
@@ -20,24 +22,24 @@ describe('ExpressRouter', () => {
   });
 
   beforeEach(() => {
-    sut = new ExpressRouter(controller);
+    sut = adapt(controller);
   });
 
   it('Should be able call handle with request correct', async () => {
-    await sut.adapt(req, res);
+    await sut(req, res, next);
 
     expect(controller.handle).toHaveBeenCalledWith({ any: 'any' });
     expect(controller.handle).toHaveBeenCalledTimes(1);
   });
   it('Should be able call handle with enpty request', async () => {
     req = getMockReq();
-    await sut.adapt(req, res);
+    await sut(req, res, next);
 
     expect(controller.handle).toHaveBeenCalledWith({});
     expect(controller.handle).toHaveBeenCalledTimes(1);
   });
   it('Should respond with 200 and correct data', async () => {
-    await sut.adapt(req, res);
+    await sut(req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ data: 'any_data' });
@@ -49,7 +51,7 @@ describe('ExpressRouter', () => {
       statusCode: 400,
       data: new Error('http_error'),
     });
-    await sut.adapt(req, res);
+    await sut(req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({ error: 'http_error' });
@@ -61,7 +63,7 @@ describe('ExpressRouter', () => {
       statusCode: 500,
       data: new Error('http_error'),
     });
-    await sut.adapt(req, res);
+    await sut(req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({ error: 'http_error' });
