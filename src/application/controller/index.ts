@@ -1,2 +1,2 @@
-export * from './controller';
-export * from './facebook-login-controller';
+export * from './controller'
+export * from './facebook-login-controller'

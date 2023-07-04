@@ -1,46 +1,46 @@
-import { JwtTokenGenerator } from '@/infra/crypto/jwt-token-generator';
-import jwt from 'jsonwebtoken';
+import { JwtTokenGenerator } from '@/infra/crypto/jwt-token-generator'
+import jwt from 'jsonwebtoken'
 
-jest.mock('jsonwebtoken');
+jest.mock('jsonwebtoken')
 
 describe('JwtTokenGenerator', () => {
-  let sut: JwtTokenGenerator;
-  let fakeJwt: jest.Mocked<typeof jwt>;
+  let sut: JwtTokenGenerator
+  let fakeJwt: jest.Mocked<typeof jwt>
   beforeAll(() => {
-    fakeJwt = jwt as jest.Mocked<typeof jwt>;
-    fakeJwt.sign.mockImplementation(() => 'any_token');
-  });
+    fakeJwt = jwt as jest.Mocked<typeof jwt>
+    fakeJwt.sign.mockImplementation(() => 'any_token')
+  })
 
   beforeEach(() => {
-    sut = new JwtTokenGenerator('any_secret');
-  });
+    sut = new JwtTokenGenerator('any_secret')
+  })
 
   it('Should be able call sign with correct values', async () => {
-    await sut.generateToken({ key: 'any_key', expirationInMs: 1000 });
+    await sut.generateToken({ key: 'any_key', expirationInMs: 1000 })
 
     expect(fakeJwt.sign).toHaveBeenCalledWith(
       { key: 'any_key' },
       'any_secret',
       {
-        expiresIn: 1,
-      },
-    );
-  });
+        expiresIn: 1
+      }
+    )
+  })
   it('Should be able a token on success', async () => {
     const token = await sut.generateToken({
       key: 'any_key',
-      expirationInMs: 1000,
-    });
+      expirationInMs: 1000
+    })
 
-    expect(token).toBe('any_token');
-  });
+    expect(token).toBe('any_token')
+  })
 
   it('Should rethrow if sign throws', async () => {
     fakeJwt.sign.mockImplementationOnce(() => {
-      throw new Error('token_error');
-    });
-    const promise = sut.generateToken({ key: 'any_key', expirationInMs: 1000 });
+      throw new Error('token_error')
+    })
+    const promise = sut.generateToken({ key: 'any_key', expirationInMs: 1000 })
 
-    expect(promise).rejects.toThrow(new Error('token_error'));
-  });
-});
+    expect(promise).rejects.toThrow(new Error('token_error'))
+  })
+})

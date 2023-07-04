@@ -1,14 +1,14 @@
 export interface ITokenGenerator {
   generateToken: (
-    params: ITokenGenerator.Params,
-  ) => Promise<ITokenGenerator.Result>;
+    params: ITokenGenerator.Params
+  ) => Promise<ITokenGenerator.Result>
 }
 
 export namespace ITokenGenerator {
   export type Params = {
-    key: string;
-    expirationInMs: number;
-  };
+    key: string
+    expirationInMs: number
+  }
 
-  export type Result = string;
+  export type Result = string
 }

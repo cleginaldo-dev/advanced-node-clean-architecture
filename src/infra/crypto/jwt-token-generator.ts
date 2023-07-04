@@ -1,15 +1,15 @@
-import { ITokenGenerator } from '@/data/contracts/crypto/token';
-import { sign } from 'jsonwebtoken';
+import { ITokenGenerator } from '@/data/contracts/crypto/token'
+import { sign } from 'jsonwebtoken'
 
 export class JwtTokenGenerator implements ITokenGenerator {
   constructor(private readonly secret: string) {}
 
   async generateToken(
-    params: ITokenGenerator.Params,
+    params: ITokenGenerator.Params
   ): Promise<ITokenGenerator.Result> {
-    const expirationInSeconds = params.expirationInMs / 1000;
+    const expirationInSeconds = params.expirationInMs / 1000
     return sign({ key: params.key }, this.secret, {
-      expiresIn: expirationInSeconds,
-    });
+      expiresIn: expirationInSeconds
+    })
   }
 }

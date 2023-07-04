@@ -1,0 +1,24 @@
+{
+  "name": "default",
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "spotx",
+  "password": "asdfasdf",
+  "database": "pg_advanced_node",
+  "entities": [
+    "./src/infra/postgres/entities/*.ts"
+  ],
+  "migrations": [
+    "./src/infra/postgres/config/typeorm/migrations/*.ts"
+  ],
+  "subscribers": [
+    "./src/modules/**/infra/typeorm/subscribers/*.ts"
+  ],
+  "cli": {
+    "migrationsDir": "./src/infra/postgres/config/typeorm/migrations",
+    "entitiesDir": "./src/infra/postgres/entities",
+    "subscribersDir": "./src/infra/postgres/subscribers"
+  }
+
+}
