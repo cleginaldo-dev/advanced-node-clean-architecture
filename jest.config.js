@@ -5,9 +5,7 @@ module.exports = {
     '!<rootDir>/src/**/index.ts',
   ],
   coverageDirectory: "coverage",
-  coveragePathIgnorePatterns: [
-    "/node_modules/"
-  ],
+  coveragePathIgnorePatterns: ["/node_modules/", "/mocks/", "/migrations/", "/pagination/", "/utils/", "/errors/", "/entities/"],
   coverageProvider: "babel",
   moduleNameMapper: {
     '@/tests/(.+)': '<rootDir>/tests/$1',
