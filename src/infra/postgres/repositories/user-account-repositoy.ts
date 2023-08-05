@@ -1,7 +1,7 @@
 import {
   ILoadUserAccountRepository,
   ISaveFacebookAccountRepository
-} from '@/data/contracts/repositories'
+} from '@/domain/contracts/repositories'
 import { PgUser } from '@/infra/postgres'
 import { getRepository } from 'typeorm'
 
