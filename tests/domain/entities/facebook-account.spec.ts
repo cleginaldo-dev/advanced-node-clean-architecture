@@ -1,4 +1,4 @@
-import { FacebookAccount } from '@/domain/models/facebook-account'
+import { FacebookAccount } from '@/domain/entities/facebook-account'
 
 describe('FacebookAccount', () => {
   const fbData = {

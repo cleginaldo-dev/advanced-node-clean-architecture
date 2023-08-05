@@ -1,8 +1,8 @@
 import { Controller } from '@/application/controller'
 import { HttpResponse, success, unauthorized } from '@/application/helpers'
 import { ValidationBuilder as B, IValidator } from '@/application/validation'
+import { AccessToken } from '@/domain/entities'
 import { IFacebookAuthentication } from '@/domain/features'
-import { AccessToken } from '@/domain/models'
 
 type httpRequest = {
   token: string
