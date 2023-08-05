@@ -8,7 +8,7 @@ import {
 import { AccessToken, FacebookAccount } from '@/domain/entities'
 import { IFacebookAuthentication } from '@/domain/features'
 
-export class FacebookAuthenticationService implements IFacebookAuthentication {
+export class FacebookAuthenticationUseCase implements IFacebookAuthentication {
   constructor(
     private readonly facebookApi: ILoadFacebookUserApi,
     private readonly userAccountRepo: ILoadUserAccountRepository &
