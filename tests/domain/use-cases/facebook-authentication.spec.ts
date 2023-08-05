@@ -6,7 +6,10 @@ import {
 } from '@/domain/contracts/repositories'
 import { AccessToken, FacebookAccount } from '@/domain/entities'
 import { AuthenticationError } from '@/domain/entities/errors'
-import { FacebookAuthenticationUseCase } from '@/domain/use-cases'
+import {
+  setupFacebookAuthentication,
+  TypeFacebookAuthentication
+} from '@/domain/use-cases'
 import { mock, MockProxy } from 'jest-mock-extended'
 
 jest.mock('@/domain/entities/facebook-account')
@@ -17,7 +20,7 @@ describe('FacebookAuthentication', () => {
   let userAccountRepo: MockProxy<
     ILoadUserAccountRepository & ISaveFacebookAccountRepository
   >
-  let sut: FacebookAuthenticationUseCase
+  let sut: TypeFacebookAuthentication
   let token: string
 
   beforeAll(() => {
@@ -38,27 +41,23 @@ describe('FacebookAuthentication', () => {
   })
 
   beforeEach(() => {
-    sut = new FacebookAuthenticationUseCase(
-      facebookApi,
-      userAccountRepo,
-      crypto
-    )
+    sut = setupFacebookAuthentication(facebookApi, userAccountRepo, crypto)
   })
 
   it('Should be able call LoadFacebookUserApi with correct params', async () => {
-    await sut.perform({ token })
+    await sut({ token })
     expect(facebookApi.loadUser).toHaveBeenCalledWith({ token })
     expect(facebookApi.loadUser).toHaveBeenCalledTimes(1)
   })
 
   it('Should return AuthenticationError when LoadFacebookUserApi returns undefined', async () => {
     facebookApi.loadUser.mockResolvedValueOnce(undefined)
-    const authResult = await sut.perform({ token })
+    const authResult = await sut({ token })
     expect(authResult).toEqual(new AuthenticationError())
   })
 
   it('Should call LoadUserByEmailRepo when LoadFacebookUserApi returns data', async () => {
-    await sut.perform({ token })
+    await sut({ token })
     expect(userAccountRepo.load).toHaveBeenCalledWith({
       email: 'any_fb_email'
     })
@@ -71,7 +70,7 @@ describe('FacebookAuthentication', () => {
       .mockImplementation(() => ({ any: 'any' }))
     jest.mocked(FacebookAccount).mockImplementation(FacebookAccountStub)
 
-    await sut.perform({ token })
+    await sut({ token })
 
     expect(userAccountRepo.saveWithFacebook).toHaveBeenCalledWith({
       any: 'any'
@@ -80,7 +79,7 @@ describe('FacebookAuthentication', () => {
   })
 
   it('Should be able call TokenGenerator with correct params', async () => {
-    await sut.perform({ token })
+    await sut({ token })
 
     expect(crypto.generateToken).toHaveBeenCalledWith({
       key: 'any_account_id',
@@ -90,7 +89,7 @@ describe('FacebookAuthentication', () => {
   })
 
   it('Should return an AccessToken on success', async () => {
-    const authResult = await sut.perform({ token })
+    const authResult = await sut({ token })
 
     expect(authResult).toEqual(new AccessToken('any_generated_token'))
   })
@@ -98,7 +97,7 @@ describe('FacebookAuthentication', () => {
   it('Should rethrow if LoadFacebookUserApi throws', async () => {
     facebookApi.loadUser.mockRejectedValueOnce(new Error('fb_error'))
 
-    const promise = sut.perform({ token })
+    const promise = sut({ token })
 
     await expect(promise).rejects.toThrow(new Error('fb_error'))
   })
@@ -106,7 +105,7 @@ describe('FacebookAuthentication', () => {
   it('Should rethrow if LoadUserAccountRepository throws', async () => {
     userAccountRepo.load.mockRejectedValueOnce(new Error('load_error'))
 
-    const promise = sut.perform({ token })
+    const promise = sut({ token })
 
     await expect(promise).rejects.toThrow(new Error('load_error'))
   })
@@ -116,7 +115,7 @@ describe('FacebookAuthentication', () => {
       new Error('save_error')
     )
 
-    const promise = sut.perform({ token })
+    const promise = sut({ token })
 
     await expect(promise).rejects.toThrow(new Error('save_error'))
   })
@@ -124,7 +123,7 @@ describe('FacebookAuthentication', () => {
   it('Should rethrow if TokenGenerator throws', async () => {
     crypto.generateToken.mockRejectedValueOnce(new Error('token_error'))
 
-    const promise = sut.perform({ token })
+    const promise = sut({ token })
 
     await expect(promise).rejects.toThrow(new Error('token_error'))
   })
