@@ -7,9 +7,9 @@ import {
 } from '@/domain/contracts/repositories'
 import { AccessToken, FacebookAccount } from '@/domain/entities'
 
-export type TypeFacebookAuthentication = (params: {
-  token: string
-}) => Promise<{ accessToken: string }>
+type Input = { token: string }
+type Output = { accessToken: string }
+export type TypeFacebookAuthentication = (params: Input) => Promise<Output>
 type Setup = (
   facebookApi: ILoadFacebookUserApi,
   userAccountRepo: ILoadUserAccountRepository & ISaveFacebookAccountRepository,
