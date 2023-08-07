@@ -26,8 +26,8 @@ export class FacebookApi {
   ) {}
 
   async loadUser(
-    params: ILoadFacebookUserApi.Params
-  ): Promise<ILoadFacebookUserApi.Result> {
+    params: ILoadFacebookUserApi.Input
+  ): Promise<ILoadFacebookUserApi.Output> {
     try {
       const userInfo = await this.getUserInfo(params.token)
       return {

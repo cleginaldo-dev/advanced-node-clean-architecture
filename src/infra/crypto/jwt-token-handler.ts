@@ -8,8 +8,8 @@ export class JwtTokenHandler implements ITokenGenerator, ITokenValidator {
   constructor(private readonly secret: string) {}
 
   async generateToken(
-    params: ITokenGenerator.Params
-  ): Promise<ITokenGenerator.Result> {
+    params: ITokenGenerator.Input
+  ): Promise<ITokenGenerator.Output> {
     const expirationInSeconds = params.expirationInMs / 1000
     return sign({ key: params.key }, this.secret, {
       expiresIn: expirationInSeconds
@@ -18,7 +18,7 @@ export class JwtTokenHandler implements ITokenGenerator, ITokenValidator {
 
   async validateToken({
     token
-  }: ITokenValidator.Params): Promise<ITokenValidator.Result> {
+  }: ITokenValidator.Input): Promise<ITokenValidator.Output> {
     const payload = verify(token, this.secret) as JwtPayload
     return payload.key
   }

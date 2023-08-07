@@ -5,12 +5,12 @@
     ],
     "body": [
       "export interface I${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} {",
-      "  perform: (params: I${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}.Params) => Promise<I${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}.Result>;",
+      "  perform: (params: I${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}.Input) => Promise<I${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}.Output>;",
       "}",
       "",
       "export namespace I${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} {",
-      "  export type Params = {};",
-      "  export type Result = {};",
+      "  export type Input = {};",
+      "  export type Output= {};",
       "}",
     ],
     "description": "A describe block for Jest"

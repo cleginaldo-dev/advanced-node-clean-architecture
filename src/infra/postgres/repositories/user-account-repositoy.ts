@@ -10,7 +10,7 @@ export class PgUserAccountRepository
 {
   async load({
     email
-  }: ILoadUserAccountRepository.Params): Promise<ILoadUserAccountRepository.Result> {
+  }: ILoadUserAccountRepository.Input): Promise<ILoadUserAccountRepository.Output> {
     const pgUserRepo = getRepository(PgUser)
     const pgUser = await pgUserRepo.findOne({
       where: { email }
@@ -24,8 +24,8 @@ export class PgUserAccountRepository
   }
 
   async saveWithFacebook(
-    params: ISaveFacebookAccountRepository.Params
-  ): Promise<ISaveFacebookAccountRepository.Result> {
+    params: ISaveFacebookAccountRepository.Input
+  ): Promise<ISaveFacebookAccountRepository.Output> {
     let id: string
     if (params.id === undefined) {
       const pgUserRepo = getRepository(PgUser)
