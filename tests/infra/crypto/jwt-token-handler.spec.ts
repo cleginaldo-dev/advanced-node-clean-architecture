@@ -5,42 +5,49 @@ jest.mock('jsonwebtoken')
 
 describe('JwtTokenHandler', () => {
   let sut: JwtTokenHandler
+  let secret: string
   let fakeJwt: jest.Mocked<typeof jwt>
   beforeAll(() => {
+    secret = 'any_secret'
     fakeJwt = jwt as jest.Mocked<typeof jwt>
-    fakeJwt.sign.mockImplementation(() => 'any_token')
   })
 
   beforeEach(() => {
-    sut = new JwtTokenHandler('any_secret')
+    sut = new JwtTokenHandler(secret)
   })
 
-  it('Should be able call sign with correct values', async () => {
-    await sut.generateToken({ key: 'any_key', expirationInMs: 1000 })
+  describe('validateToken', () => {})
 
-    expect(fakeJwt.sign).toHaveBeenCalledWith(
-      { key: 'any_key' },
-      'any_secret',
-      {
-        expiresIn: 1
-      }
-    )
-  })
-  it('Should be able a token on success', async () => {
-    const token = await sut.generateToken({
-      key: 'any_key',
-      expirationInMs: 1000
+  describe('generateToken', () => {
+    let key: string
+    let token: string
+    let expirationInMs: number
+    let expiresIn: number
+    beforeAll(() => {
+      key = 'any_key'
+      token = 'any_token'
+      expirationInMs = 1000
+      expiresIn = 1
+      fakeJwt.sign.mockImplementation(() => token)
+    })
+    it('Should be able call sign with correct values', async () => {
+      await sut.generateToken({ key, expirationInMs })
+
+      expect(fakeJwt.sign).toHaveBeenCalledWith({ key }, secret, { expiresIn })
+    })
+    it('Should be able a token on success', async () => {
+      const generatedToken = await sut.generateToken({ key, expirationInMs })
+
+      expect(generatedToken).toBe(token)
     })
 
-    expect(token).toBe('any_token')
-  })
+    it('Should rethrow if sign throws', async () => {
+      fakeJwt.sign.mockImplementationOnce(() => {
+        throw new Error('token_error')
+      })
+      const promise = sut.generateToken({ key, expirationInMs })
 
-  it('Should rethrow if sign throws', async () => {
-    fakeJwt.sign.mockImplementationOnce(() => {
-      throw new Error('token_error')
+      expect(promise).rejects.toThrow(new Error('token_error'))
     })
-    const promise = sut.generateToken({ key: 'any_key', expirationInMs: 1000 })
-
-    expect(promise).rejects.toThrow(new Error('token_error'))
   })
 })
