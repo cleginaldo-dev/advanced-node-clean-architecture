@@ -16,8 +16,6 @@ describe('JwtTokenHandler', () => {
     sut = new JwtTokenHandler(secret)
   })
 
-  describe('validateToken', () => {})
-
   describe('generateToken', () => {
     let key: string
     let token: string
@@ -34,6 +32,7 @@ describe('JwtTokenHandler', () => {
       await sut.generateToken({ key, expirationInMs })
 
       expect(fakeJwt.sign).toHaveBeenCalledWith({ key }, secret, { expiresIn })
+      expect(fakeJwt.sign).toHaveBeenCalledTimes(1)
     })
     it('Should be able a token on success', async () => {
       const generatedToken = await sut.generateToken({ key, expirationInMs })
@@ -48,6 +47,20 @@ describe('JwtTokenHandler', () => {
       const promise = sut.generateToken({ key, expirationInMs })
 
       expect(promise).rejects.toThrow(new Error('token_error'))
+    })
+  })
+
+  describe('validateToken', () => {
+    let token: string
+
+    beforeAll(() => {
+      token = 'any_token'
+    })
+    it('Should be able call sign with correct values', async () => {
+      await sut.validateToken({ token })
+
+      expect(fakeJwt.verify).toHaveBeenCalledWith(token, secret)
+      expect(fakeJwt.verify).toHaveBeenCalledTimes(1)
     })
   })
 })

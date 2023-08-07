@@ -19,7 +19,7 @@ export interface ITokenValidator {
   ) => Promise<ITokenValidator.Result>
 }
 
-namespace ITokenValidator {
+export namespace ITokenValidator {
   export type Params = { token: string }
   export type Result = string
 }
