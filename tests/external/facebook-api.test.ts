@@ -17,9 +17,9 @@ describe('FacebookApi', () => {
 
   it('Should return a Facebook User if token is valid', async () => {
     const fbUser = await sut.loadUser({
-      token:
-        'EAAjCU5IkeuEBALeUfIupz07IQtNH28TJ74lMxEZCTvfGjy9lvaZBBoavYIWkBY3X31x5ZB291vsns7Yxelaha0rZBjTaaPFyzG4kzFlHjjzzvMRvQuug9137ZCCMVlSP9kXLjerCrtD3del0NzZAUM8bOfTD7zjylioR4mkqDTWwokYLhTjIVtbzGotZCZAaxRj6qL2Yk0MEdkgcqIR5hp1fRaKG0odSISEGBCxOaZApIZB6xe3TmtJg9z'
+      token: env.facebookApi.accessToken
     })
+    // eslint-disable-next-line no-console
     console.log('fbUser', fbUser)
 
     // expect(fbUser).toEqual({
