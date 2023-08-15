@@ -1,6 +1,6 @@
 import { PgUser } from '@/infra/postgres/entities'
 import { PgUserAccountRepository } from '@/infra/postgres/repositories'
-import { makeFackDb } from '@/tests/infra/postgres/mocks'
+import { makeFakeDb } from '@/tests/infra/postgres/mocks'
 import { IBackup } from 'pg-mem'
 import { getRepository, Repository, getConnection } from 'typeorm'
 
@@ -9,7 +9,7 @@ describe('PgUserAccountRepository', () => {
   let pgUserRepo: Repository<PgUser>
   let backup: IBackup
   beforeAll(async () => {
-    const db = await makeFackDb()
+    const db = await makeFakeDb()
     backup = db.backup()
     pgUserRepo = getRepository(PgUser)
   })

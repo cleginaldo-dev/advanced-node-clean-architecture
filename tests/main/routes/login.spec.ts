@@ -1,7 +1,7 @@
 import { UnauthorizedError } from '@/application/errors'
 import { PgUser } from '@/infra/postgres/entities'
 import { app } from '@/main/config/app'
-import { makeFackDb } from '@/tests/infra/postgres/mocks'
+import { makeFakeDb } from '@/tests/infra/postgres/mocks'
 import { IBackup } from 'pg-mem'
 import request from 'supertest'
 import { getConnection } from 'typeorm'
@@ -16,7 +16,7 @@ describe('Login Routes', () => {
       }))
     }))
     beforeAll(async () => {
-      const db = await makeFackDb([PgUser])
+      const db = await makeFakeDb([PgUser])
       backup = db.backup()
     })
 
