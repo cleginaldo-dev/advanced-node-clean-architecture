@@ -6,6 +6,7 @@ import { MockProxy, mock } from 'jest-mock-extended'
 
 describe('ExpressMiddleware', () => {
   let middleware: MockProxy<IMiddleware>
+
   let sut: RequestHandler
   let req: Request
   let res: Response
