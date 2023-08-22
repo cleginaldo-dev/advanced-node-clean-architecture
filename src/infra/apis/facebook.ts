@@ -1,4 +1,4 @@
-import { ILoadFacebookUserApi } from '@/domain/contracts/apis'
+import { ILoadFacebookUser } from '@/domain/contracts/gateways'
 import { IHttpGetClient } from '@/infra/http'
 
 type AppToken = {
@@ -26,8 +26,8 @@ export class FacebookApi {
   ) {}
 
   async loadUser(
-    params: ILoadFacebookUserApi.Input
-  ): Promise<ILoadFacebookUserApi.Output> {
+    params: ILoadFacebookUser.Input
+  ): Promise<ILoadFacebookUser.Output> {
     try {
       const userInfo = await this.getUserInfo(params.token)
       return {

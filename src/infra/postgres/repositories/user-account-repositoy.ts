@@ -1,16 +1,16 @@
 import {
-  ILoadUserAccountRepository,
-  ISaveFacebookAccountRepository
+  ILoadUserAccount,
+  ISaveFacebookAccount
 } from '@/domain/contracts/repositories'
 import { PgUser } from '@/infra/postgres'
 import { getRepository } from 'typeorm'
 
 export class PgUserAccountRepository
-  implements ILoadUserAccountRepository, ISaveFacebookAccountRepository
+  implements ILoadUserAccount, ISaveFacebookAccount
 {
   async load({
     email
-  }: ILoadUserAccountRepository.Input): Promise<ILoadUserAccountRepository.Output> {
+  }: ILoadUserAccount.Input): Promise<ILoadUserAccount.Output> {
     const pgUserRepo = getRepository(PgUser)
     const pgUser = await pgUserRepo.findOne({
       where: { email }
@@ -24,8 +24,8 @@ export class PgUserAccountRepository
   }
 
   async saveWithFacebook(
-    params: ISaveFacebookAccountRepository.Input
-  ): Promise<ISaveFacebookAccountRepository.Output> {
+    params: ISaveFacebookAccount.Input
+  ): Promise<ISaveFacebookAccount.Output> {
     let id: string
     if (params.id === undefined) {
       const pgUserRepo = getRepository(PgUser)

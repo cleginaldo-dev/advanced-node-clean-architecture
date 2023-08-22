@@ -1,10 +1,8 @@
-export interface ILoadUserAccountRepository {
-  load(
-    params: ILoadUserAccountRepository.Input
-  ): Promise<ILoadUserAccountRepository.Output>
+export interface ILoadUserAccount {
+  load(params: ILoadUserAccount.Input): Promise<ILoadUserAccount.Output>
 }
 
-export namespace ILoadUserAccountRepository {
+export namespace ILoadUserAccount {
   export type Input = {
     email: string
   }
@@ -16,13 +14,13 @@ export namespace ILoadUserAccountRepository {
       }
 }
 
-export interface ISaveFacebookAccountRepository {
+export interface ISaveFacebookAccount {
   saveWithFacebook(
-    params: ISaveFacebookAccountRepository.Input
-  ): Promise<ISaveFacebookAccountRepository.Output>
+    params: ISaveFacebookAccount.Input
+  ): Promise<ISaveFacebookAccount.Output>
 }
 
-export namespace ISaveFacebookAccountRepository {
+export namespace ISaveFacebookAccount {
   export type Input = {
     id?: string
     name: string
