@@ -7,7 +7,7 @@
       "",
       "  beforeEach(() => {})",
       "",
-      "  it('Should call Repository with correct values', async () => {})",
+      "  it('Should call Repository with correct input', async () => {})",
       "})",
       ""
     ],
