@@ -8,7 +8,7 @@ import { AuthenticationError } from '@/domain/entities/errors'
 import {
   setupFacebookAuthentication,
   TypeFacebookAuthentication
-} from '@/domain/use-cases'
+} from '@/domain/usecases'
 import { mock, MockProxy } from 'jest-mock-extended'
 
 jest.mock('@/domain/entities/facebook-account')

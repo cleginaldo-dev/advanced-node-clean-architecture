@@ -1,7 +1,7 @@
 import {
   setupFacebookAuthentication,
   TypeFacebookAuthentication
-} from '@/domain/use-cases'
+} from '@/domain/usecases'
 import { makeJwtTokenHandler, makeFacebookApi } from '@/main/factories/gateways'
 import { makePgUserAccountRepository } from '@/main/factories/repositories'
 
