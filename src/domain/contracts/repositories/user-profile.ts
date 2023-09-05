@@ -3,7 +3,7 @@ export interface ISaveUserPicture {
 }
 
 export namespace ISaveUserPicture {
-  export type Input = { pictureUrl?: string }
+  export type Input = { pictureUrl?: string; initials?: string }
   export type Output = void
 }
 
@@ -13,5 +13,5 @@ export interface ILoadUserProfile {
 
 export namespace ILoadUserProfile {
   export type Input = { id: string }
-  export type Output = void
+  export type Output = { name?: string }
 }

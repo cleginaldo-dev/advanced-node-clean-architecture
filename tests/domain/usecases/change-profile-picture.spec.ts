@@ -22,6 +22,9 @@ describe('ChangeProfilePicture', () => {
     fileStorage = mock()
     crypto = mock()
     userProfileRepo = mock()
+    userProfileRepo.load.mockResolvedValue({
+      name: 'Cleginaldo Bandeira de Lima'
+    })
     fileStorage.upload.mockResolvedValue('any_url')
     crypto.uuid.mockReturnValue(uuid)
   })
@@ -57,7 +60,51 @@ describe('ChangeProfilePicture', () => {
     await sut({ id: 'any_id', file: undefined })
 
     expect(userProfileRepo.savePicture).toHaveBeenCalledWith({
-      pictureUrl: undefined
+      pictureUrl: undefined,
+      initials: 'CL'
+    })
+    expect(userProfileRepo.savePicture).toHaveBeenCalledTimes(1)
+  })
+  it('Should call SaveUserPicture with initials when file is undefined', async () => {
+    userProfileRepo.load.mockResolvedValueOnce({
+      name: 'cleginaldo bandeira de lima'
+    })
+    await sut({ id: 'any_id', file: undefined })
+
+    expect(userProfileRepo.savePicture).toHaveBeenCalledWith({
+      pictureUrl: undefined,
+      initials: 'CL'
+    })
+    expect(userProfileRepo.savePicture).toHaveBeenCalledTimes(1)
+  })
+  it('Should call SaveUserPicture with single initials when file is undefined', async () => {
+    userProfileRepo.load.mockResolvedValueOnce({ name: 'cleginaldo' })
+    await sut({ id: 'any_id', file: undefined })
+
+    expect(userProfileRepo.savePicture).toHaveBeenCalledWith({
+      pictureUrl: undefined,
+      initials: 'CL'
+    })
+    expect(userProfileRepo.savePicture).toHaveBeenCalledTimes(1)
+  })
+  it('Should call SaveUserPicture with single initial when file is undefined', async () => {
+    userProfileRepo.load.mockResolvedValueOnce({ name: 'c' })
+    await sut({ id: 'any_id', file: undefined })
+
+    expect(userProfileRepo.savePicture).toHaveBeenCalledWith({
+      pictureUrl: undefined,
+      initials: 'C'
+    })
+    expect(userProfileRepo.savePicture).toHaveBeenCalledTimes(1)
+  })
+
+  it('Should call SaveUserPicture with name undefined when file is undefined', async () => {
+    userProfileRepo.load.mockResolvedValueOnce({ name: undefined })
+    await sut({ id: 'any_id', file: undefined })
+
+    expect(userProfileRepo.savePicture).toHaveBeenCalledWith({
+      pictureUrl: undefined,
+      initials: undefined
     })
     expect(userProfileRepo.savePicture).toHaveBeenCalledTimes(1)
   })
