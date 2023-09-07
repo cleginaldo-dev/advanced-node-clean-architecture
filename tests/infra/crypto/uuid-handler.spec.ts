@@ -10,7 +10,9 @@ export class UuidHandler implements IUuidGenerator {
 jest.mock('uuid')
 describe('UuidHandler', () => {
   let sut: UuidHandler
-  beforeAll(() => {})
+  beforeAll(() => {
+    jest.mocked(v4).mockReturnValue('any_uuid')
+  })
 
   beforeEach(() => {
     sut = new UuidHandler()
@@ -23,7 +25,6 @@ describe('UuidHandler', () => {
   })
 
   it('Should return correct uuid', () => {
-    jest.mocked(v4).mockReturnValueOnce('any_uuid')
     const uuid = sut.uuid({ key: 'any_key' })
 
     expect(uuid).toBe('any_key_any_uuid')
