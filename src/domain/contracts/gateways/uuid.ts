@@ -1,5 +1,5 @@
 export interface IUuidGenerator {
-  uuid: (input: IUuidGenerator.Input) => IUuidGenerator.Output
+  uuid(input: IUuidGenerator.Input): IUuidGenerator.Output
 }
 
 export namespace IUuidGenerator {
