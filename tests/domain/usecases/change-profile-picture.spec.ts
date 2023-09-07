@@ -16,6 +16,7 @@ import { MockProxy, mock } from 'jest-mock-extended'
 
 jest.mock('@/domain/entities/user-profile')
 describe('ChangeProfilePicture', () => {
+  const saveError = new Error('save_error')
   let file: Buffer
   let uuid: string
   let crypto: MockProxy<IUuidGenerator>
@@ -91,15 +92,26 @@ describe('ChangeProfilePicture', () => {
       pictureUrl: 'any_picture_url'
     })
   })
-  it('Should call DeleteFile when file is provided and SaveUserPicture throws', async () => {
-    const error = new Error('save_error')
-    userProfileRepo.savePicture.mockRejectedValueOnce(error)
 
+  it('Should call DeleteFile when file is provided and SaveUserPicture throws', async () => {
+    userProfileRepo.savePicture.mockRejectedValueOnce(saveError)
+    expect.assertions(2)
     const promise = sut({ id: 'any_id', file })
 
     promise.catch(() => {
       expect(fileStorage.delete).toHaveBeenCalledWith({ key: uuid })
       expect(fileStorage.delete).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  it('Should not call DeleteFile when file does not exists and SaveUserPicture throws', async () => {
+    userProfileRepo.savePicture.mockRejectedValueOnce(saveError)
+    expect.assertions(1)
+
+    const promise = sut({ id: 'any_id', file: undefined })
+
+    promise.catch(() => {
+      expect(fileStorage.delete).not.toHaveBeenCalled()
     })
   })
 })
