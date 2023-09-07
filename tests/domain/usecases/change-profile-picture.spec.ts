@@ -114,4 +114,12 @@ describe('ChangeProfilePicture', () => {
       expect(fileStorage.delete).not.toHaveBeenCalled()
     })
   })
+
+  it('Should rethrow if SaveUserPicture throws', async () => {
+    userProfileRepo.savePicture.mockRejectedValueOnce(saveError)
+
+    const promise = sut({ id: 'any_id', file: undefined })
+
+    await expect(promise).rejects.toThrowError(saveError)
+  })
 })
