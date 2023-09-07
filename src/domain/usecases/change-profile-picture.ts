@@ -9,7 +9,8 @@ type Setup = (
   userProfileRepo: ISaveUserPicture & ILoadUserProfile
 ) => ChangeProfilePicture
 type Input = { id: string; file?: Buffer }
-export type ChangeProfilePicture = (input: Input) => Promise<void>
+type Output = { pictureUrl?: string; initials?: string }
+export type ChangeProfilePicture = (input: Input) => Promise<Output>
 
 export const setupChangeProfilePicture: Setup =
   (fileStorage, crypto, userProfileRepo) =>
@@ -26,4 +27,5 @@ export const setupChangeProfilePicture: Setup =
     const userProfile = new UserProfile(id)
     userProfile.setPicture(data)
     await userProfileRepo.savePicture(userProfile)
+    return userProfile
   }
