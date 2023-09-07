@@ -1,10 +1,14 @@
-import { IUploadFile, IUuidGenerator } from '@/domain/contracts/gateways'
+import {
+  IDeleteFile,
+  IUploadFile,
+  IUuidGenerator
+} from '@/domain/contracts/gateways'
 
 import { ILoadUserProfile, ISaveUserPicture } from '../contracts/repositories'
 import { UserProfile } from '../entities'
 
 type Setup = (
-  fileStorage: IUploadFile,
+  fileStorage: IUploadFile & IDeleteFile,
   crypto: IUuidGenerator,
   userProfileRepo: ISaveUserPicture & ILoadUserProfile
 ) => ChangeProfilePicture
@@ -15,17 +19,19 @@ export type ChangeProfilePicture = (input: Input) => Promise<Output>
 export const setupChangeProfilePicture: Setup =
   (fileStorage, crypto, userProfileRepo) =>
   async ({ id, file }) => {
+    const key = crypto.uuid({ key: id })
     const data: { pictureUrl?: string; name?: string } = {}
     if (file !== undefined) {
-      data.pictureUrl = await fileStorage.upload({
-        file,
-        key: crypto.uuid({ key: id })
-      })
+      data.pictureUrl = await fileStorage.upload({ file, key })
     } else {
       data.name = (await userProfileRepo.load({ id })).name
     }
     const userProfile = new UserProfile(id)
     userProfile.setPicture(data)
-    await userProfileRepo.savePicture(userProfile)
+    try {
+      await userProfileRepo.savePicture(userProfile)
+    } catch (error) {
+      await fileStorage.delete({ key })
+    }
     return userProfile
   }

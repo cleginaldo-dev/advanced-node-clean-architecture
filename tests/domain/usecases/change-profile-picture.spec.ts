@@ -1,4 +1,8 @@
-import { IUploadFile, IUuidGenerator } from '@/domain/contracts/gateways'
+import {
+  IDeleteFile,
+  IUploadFile,
+  IUuidGenerator
+} from '@/domain/contracts/gateways'
 import {
   ILoadUserProfile,
   ISaveUserPicture
@@ -16,7 +20,7 @@ describe('ChangeProfilePicture', () => {
   let uuid: string
   let crypto: MockProxy<IUuidGenerator>
   let userProfileRepo: MockProxy<ISaveUserPicture & ILoadUserProfile>
-  let fileStorage: MockProxy<IUploadFile>
+  let fileStorage: MockProxy<IUploadFile & IDeleteFile>
   let sut: ChangeProfilePicture
   beforeAll(() => {
     file = Buffer.from('any_buffer')
@@ -85,6 +89,17 @@ describe('ChangeProfilePicture', () => {
     expect(result).toMatchObject({
       initials: 'any_initials',
       pictureUrl: 'any_picture_url'
+    })
+  })
+  it('Should call DeleteFile when file is provided and SaveUserPicture throws', async () => {
+    const error = new Error('save_error')
+    userProfileRepo.savePicture.mockRejectedValueOnce(error)
+
+    const promise = sut({ id: 'any_id', file })
+
+    promise.catch(() => {
+      expect(fileStorage.delete).toHaveBeenCalledWith({ key: uuid })
+      expect(fileStorage.delete).toHaveBeenCalledTimes(1)
     })
   })
 })
