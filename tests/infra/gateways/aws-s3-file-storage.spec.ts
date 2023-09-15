@@ -3,7 +3,7 @@ import { S3, config } from 'aws-sdk'
 
 jest.mock('aws-sdk')
 
-export class AwsS3FileStorage {
+export class AwsS3FileStorage implements IUploadFile {
   constructor(
     accessKey: string,
     secret: string,
@@ -14,7 +14,7 @@ export class AwsS3FileStorage {
     })
   }
 
-  async upload({ file, key }: IUploadFile.Input): Promise<void> {
+  async upload({ file, key }: IUploadFile.Input): Promise<IUploadFile.Output> {
     const s3 = new S3()
     await s3
       .putObject({
@@ -24,6 +24,7 @@ export class AwsS3FileStorage {
         ACL: 'public-read'
       })
       .promise()
+    return `https://${this.bucket}.s3.amazonaws.com/${encodeURIComponent(key)}`
   }
 }
 
@@ -79,5 +80,17 @@ describe('AwsS3FileStorage', () => {
     })
     expect(putObjectSpy).toHaveBeenCalledTimes(1)
     expect(putObjectPromiseSpy).toHaveBeenCalledTimes(1)
+  })
+
+  it('Should return imageUrl', async () => {
+    const imageUrl = await sut.upload({ file, key: Key })
+
+    expect(imageUrl).toBe(`https://${Bucket}.s3.amazonaws.com/${Key}`)
+  })
+
+  it('Should return encoded imageUrl', async () => {
+    const imageUrl = await sut.upload({ file, key: 'any key' })
+
+    expect(imageUrl).toBe(`https://${Bucket}.s3.amazonaws.com/any%20key`)
   })
 })
